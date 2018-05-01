@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="stylesheets/leaflet.css" rel="stylesheet" />
+    <link href="js/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="stylesheets/bootstrap-combobox.css" type="text/css" rel="stylesheet">
+    <link href='stylesheets/mapbox-gl.css' rel='stylesheet' />
+    <link href="stylesheets/jquery-ui.min.css" rel="stylesheet">
+    <link href="js/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="css/leaflet.pm.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <link href="css/bootstrap-switch.min.css" rel="stylesheet">
+    <title>Document</title>
+    <script src="js/d3.v3.min.js"></script>
+    <script src='js/csv.js'></script>
+    <script src="jLouvain-master/jLouvain.js"></script>
+    <script src="d3.ForceBundle-master/d3-ForceEdgeBundling.js"></script>
+    <script src="js/d3.v4.min.js"></script>
+    <script src="voronoi-maps-master/lib/voronoi_map.js"></script>
+    <script src="js/kmeans.js"></script>
+    <script src="js/kmeansCluster.js"></script>
+    <script src="js/mutualInfo.js"></script>
+    <script src="js/parallelCoorsView.js"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script src='D3-v4-Radar-Chart-Redesign-master/radarChart.js'></script>
+    <script src="js/pixi.min.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+    <script src="js/L.PixiOverlay.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/d3-color.v1.min.js"></script>
+    <script src="js/d3-interpolate.v1.min.js"></script>
+    <script src="js/d3-scale-chromatic.v1.min.js"></script>
+    <script src="js/d3-tip.js"></script>
+    <script src="js/bootstrap-switch-master/dist/js/bootstrap-switch.min.js"></script>
+    <script src="js/leaflet.pm.min.js"></script>
+    <script src="Leaflet.D3SvgOverlay-master/L.D3SvgOverlay.min.js"></script>
+    <script src="js/matrixView.js"></script>
+
+</head>
+
+<body>
+
+    <div id='main' class="container-fluid">
+        <div class="col-md-2 panel panel-default" id='controlPanel'>
+            <span class='headingText'>Control Panel</span>
+            <span id='loadDataText'>Load Data:</span>
+            <div class="btn-group" id='loadDataButtonGroup'>
+                <button type="button" id='loadDataButton' class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    GDP Data
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" id='GdpData'>GDP Data</a>
+                    </li>
+                    <li>
+                        <a href="#" id='AirData'>Air Data</a>
+                    </li>
+                    <li>
+                        <a href="#" id='BikeData'>Bike Data</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class='checkboxGroup'>
+                <div class='checkState' id='showPara'>
+                    <span class='checkboxText'>Show ParaCoords</span>
+                    <input type="checkbox" name="my-checkbox" id='my-checkboxid' data-size="mini">
+                </div>
+
+                <div class='checkState' id='stacked'>
+                    <span class='checkboxText'>Stacked </span>
+                    <input type="checkbox" name="my-checkbox2" id='my-checkboxid2' data-size="mini">
+                </div>
+            </div>
+            <div id='ThrPanel'>
+                <span class='sliderText' id='spaceThrText'>spaceDisThr:
+                    <input type="text" id="spaceDisAmount" readonly class='sliderAmount'>
+                </span>
+                <div id="spaceDisSlider" class="slider"></div>
+                <span class='sliderText'>propDisThr:
+                    <input type="text" id="propDisAmount" readonly class='sliderAmount'>
+                </span>
+                <div id="propDisSlider" class="slider"></div>
+            </div>
+            <div class="panel panel-default" id='radarChart'>
+                <span class='headingText'>Radar View</span>
+            </div>
+            <div class="panel panel-default" id='matrixView'>
+                <span class='headingText'>Matrix View</span>
+                <svg id='matrixSvg'></svg>
+            </div>
+        </div>
+        <div class="col-md-9 panel panel-default" id='map'>
+            <div class="panel panel-default" id='tipDiv'>
+            </div>
+            <div class="panel panel-default" id='colorRectDiv'>
+                <svg id='colorRectSvg' style="width:100%;height:100%"></svg>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    <script src='js/loadData.js'></script>
+    <script src='js/gzyCluster.js'></script>
+    <script src='js/mapView.js'></script>
+    <script src='js/radarView.js'></script>
+
+</body>
+
+</html>

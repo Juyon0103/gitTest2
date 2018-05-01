@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="jquery-ui-1.12.1.custom/jquery-ui.min.css">
+</head>
+
+<body>
+    <p>
+        <label for="amount">Space Dis:</label>
+        <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+    <div id="slider1"></div>
+    <p>
+        <label for="amount2">Prop Dis:</label>
+        <input type="text" id="amount2" readonly style="margin-top:100px;border:0; color:#f6931f; font-weight:bold;">
+    </p>
+
+
+    <div id="slider2"></div>
+</body>
+<script src="js/d3.v3.min.js" charset="utf-8"></script>
+<script src="jquery.js" charset="utf-8"></script>
+<script src="jquery-ui-1.12.1.custom/jquery-ui.min.js" charset="utf-8"></script>
+<script>
+    var cloneObj = function (obj) {
+        var str, newobj = obj.constructor === Array ? [] : {};
+        if (typeof obj !== 'object') {
+            return;
+        } else if (window.JSON) {
+            str = JSON.stringify(obj), //系列化对象
+                newobj = JSON.parse(str); //还原
+        } else {
+            for (var i in obj) {
+                newobj[i] = typeof obj[i] === 'object' ?
+                    cloneObj(obj[i]) : obj[i];
+            }
+        }
+        return newobj;
+    };
+    $(function () {
+        $("#slider1").slider({
+            value: 15,
+            min: 0,
+            max: 15,
+            step: 0.01,
+            slide: function (event, ui) {
+                $("#amount").val(ui.value);
+                spaceDisThr = ui.value;
+                cluster(data);
+            }
+        });
+        $("#amount").val($("#slider1").slider("value"));
+
+
+
+        $("#slider2").slider({
+            value: 1.1,
+            min: 0,
+            max: 1.1,
+            step: 0.01,
+            slide: function (event, ui) {
+                $("#amount2").val(ui.value);
+                propDisThr = ui.value;
+                cluster(data);
+            }
+        });
+        $("#amount2").val($("#slider2").slider("value"));
+    });
+
+    var spaceDisThr = 15;
+    var propDisThr = 1.1;
+    var DmaxList = [];
+
+    var data = [{
+            color: -1,
+            position: [116.395645, 39.929986],
+            props: [161.83, 4352.3, 3536.89, 815.41, 14986.43, 883.58, 2372.43, 374.75, 2822.07, 1339.52, 7194.08]
+        },
+        {
+            color: -1,
+            position: [117.210813, 39.14393],
+            props: [188.45, 7276.68, 6678.6, 598.08, 6905.03, 725.05, 1902.52, 241.34, 1202.04, 519.37, 2314.71]
+        },
+        {
+            color: -1,
+            position: [114.522082, 38.048958],
+            props: [3500.42, 14762.1, 13194.76, 1567.34, 10038.89, 2377.59, 2163.95, 415.18, 1033.55, 1041.28, 3007.34]
+        },
+		{
+            color: -1,
+            position: [112.550864, 37.890277],
+            props: [773.81, 6792.68, 6032.99, 759.69, 5035.75, 891.66, 1079.48, 324.59, 736.27, 329.8, 1673.95]
+        },
+        {
+            color: -1,
+            position: [111.660351, 40.828319],
+            props: [1599.41, 9084.19, 7944.4, 1139.79, 6148.78, 1303.73, 1547.04, 11494.0506, 563, 414.59, 1851.57]
+        },
+		{
+            color: -1,
+            position: [123.432791, 41.808645],
+            props: [2321.63, 14269.46, 12510.27, 1759.19, 10486.56, 1384.09, 2414.31, 468.85, 1136.1, 1134.49, 3875.67]
+        },
+        {
+            color: -1,
+            position: [125.313642, 43.898338],
+            props: [1509.34, 6858.23, 6033.35, 824.88, 4613.89, 486.18, 1080.58, 541.9, 303.02, 266.6, 2209.88]
+        },
+		{
+            color: -1,
+            position: [126.657717, 45.773225],
+            props: [2516.79, 5918.22, 5090.34, 827.88, 5947.92, 616.03, 1458.12, 267.63, 551.16, 553.11, 2365.61]
+        },
+        {
+            color: -1,
+            position: [121.487899, 31.249162],
+            props: [129.28, 8027.77, 7236.69, 791.08, 13445.07, 935.06, 3533.1, 403.89, 2823.29, 1343.77, 4495.51]
+        },
+		{
+            color: -1,
+            position: [118.778074, 32.057236],
+            props: [3646.08, 29094.03, 25612.24, 3481.79, 26421.64, 2530.02, 6273.46, 314.34, 3703.69, 3436.65, 9335.03]
+        },
+        {
+            color: -1,
+            position: [120.219375, 30.259244],
+            props: [1784.62, 18446.65, 16368.43, 2078.22, 17337.22, 1326.02, 4111.44, 1142.79, 2965.67, 2190.03, 6007.72]
+        },
+		{
+            color: -1,
+            position: [117.282699, 31.866942],
+            props: [2348.09, 10403.96, 8928.02, 1475.94, 6286.82, 707.1, 1355.54, 736.34, 735.44, 763.56, 2427.15]
+        },
+        {
+            color: -1,
+            position: [119.330221, 26.047125],
+            props: [1936.31, 11315.3, 9455.32, 1859.98, 8508.03, 1176.19, 1789.88, 298.03, 1174.59, 1216.76, 2797.38]
+        },
+		{
+            color: -1,
+            position: [115.893528, 28.689578],
+            props: [1636.49, 7671.38, 6434.41, 1236.97, 5030.63, 678.62, 1035.04, 353.23, 494.78, 500.57, 1981.91]
+        },
+        {
+            color: -1,
+            position: [117.024967, 36.682785],
+            props: [4742.63, 27422.47, 24222.16, 3200.31, 22519.23, 2746.11, 7523.79, 339.71, 2265.5, 2237.46, 6559.11]
+        },
+		{
+            color: -1,
+            position: [113.649644, 34.75661],
+            props: [4058.98, 17806.39, 15960.6, 1845.79, 10290.49, 1309.3, 2072.59, 1187.26, 1181.77, 1165.07, 3563.29]
+        },
+        {
+            color: -1,
+            position: [114.3162, 30.581084],
+            props: [3098.16, 12171.56, 10531.37, 1640.19, 9398.77, 1078.11, 1903.62, 998.47, 1073.89, 797.19, 3966.23]
+        },
+		{
+            color: -1,
+            position: [112.979353, 28.213478],
+            props: [3099.23, 11517.35, 10001, 1516.35, 9885.09, 1174.29, 2045.65, 579.73, 706.92, 636.26, 4818.32]
+        },
+        {
+            color: -1,
+            position: [113.30765, 23.120049],
+            props: [3047.51, 29427.49, 27426.26, 2001.23, 29688.97, 2604.41, 7039.2, 503.65, 3817.42, 4207.46, 10628.64]
+        },
+		{
+            color: -1,
+            position: [108.297234, 22.806493],
+            props: [2343.57, 6863.04, 5749.65, 1113.39, 5171.39, 677.77, 1083.06, 1391.84, 706.91, 520.51, 1783.62]
+        },
+        {
+            color: -1,
+            position: [110.330802, 20.022071],
+            props: [756.47, 871.29, 551.11, 320.18, 1518.7, 140.96, 344.49, 399.52, 151.64, 288.54, 482.74]
+        },
+		{
+            color: -1,
+            position: [106.530635, 29.544606],
+            props: [1016.74, 6397.92, 5249.65, 1148.27, 5242.03, 580.93, 984.4, 0, 1068.35, 728.83, 1649.73]
+        },
+        {
+            color: -1,
+            position: [104.067923, 30.679943],
+            props: [3425.61, 13579.03, 11578.55, 2000.48, 9256.13, 751.55, 1472.59, 98.96, 1581.47, 762.77, 4001.91]
+        },
+		{
+            color: -1,
+            position: [106.709177, 26.629907],
+            props: [1029.05, 3243.7, 2686.52, 557.18, 3734.04, 775.09, 582.05, 685.84, 433.53, 202.94, 1445.57]
+        },
+        {
+            color: -1,
+            position: [102.714601, 25.049153],
+            props: [1895.34, 4927.82, 3767.58, 1160.24, 4897.75, 273.51, 1162.17, 294.86, 693.93, 262.84, 2132.06]
+        },
+		{
+            color: -1,
+            position: [91.111891, 29.662557],
+            props: [86.82, 292.92, 61.16, 231.76, 427.93, 28.8, 51.24, 373.24, 43.05, 22.74, 256.39]
+        },
+        {
+            color: -1,
+            position: [108.93984, 34.34127],
+            props: [1526.05, 8911.64, 7507.34, 1404.3, 5607.52, 657.31, 1293.77, 0, 674.88, 507.72, 2134.33]
+        },
+		{
+            color: -1,
+            position: [103.823305, 36.064226],
+            props: [879.37, 2821.04, 2225.22, 595.82, 2567.6, 347.18, 440.31, 339.51, 234.18, 158.4, 1227.89]
+        },
+        {
+            color: -1,
+            position: [101.767921, 36.640739],
+            props: [207.59, 1204.31, 970.53, 233.78, 689.15, 74.23, 126.27, 159.64, 94.37, 34.21, 336.6]
+        },
+		{
+            color: -1,
+            position: [106.206479, 38.502621],
+            props: [222.98, 1264.96, 944.5, 320.46, 1077.12, 201.71, 133.44, 23.47, 199.81, 101.84, 394.25]
+        },
+        {
+            color: -1,
+            position: [87.564988, 43.84038],
+            props: [1468.29, 3765.97, 3024.27, 741.7, 3125.98, 422.37, 480.94, 46.07, 420.27, 232.44, 1449.02]
+        }
+    ]
+
+    for (var i = 0; i < data[0].props.length; i++) {
+        var Di_max = d3.max(data, function (d) {
+            return d.props[i];
+        })
+        var Di_min = d3.min(data, function (d) {
+            return d.props[i];
+        })
+        DmaxList.push(Di_max - Di_min);
+    }
+    console.log('DmaxList: ', DmaxList);
+
+    function cluster(data) {
+
+        var attrData = cloneObj(data);
+
+        console.log('attrData: ', attrData);
+
+        getSpaceDis = function (p1, p2) {
+            return Math.sqrt(Math.pow(p1.position[0] - p2.position[0], 2) +
+                Math.pow(p1.position[1] - p2.position[1], 2));
+        }
+
+        getPropDis = function (p1, p2) {
+            var propCount = 0;
+            for (var i = 0; i < p1.props.length; i++) {
+                var Aik = p1.props[i];
+                var Ajk = p2.props[i];
+                var Dkmax = DmaxList[i];
+                propCount += (Math.abs(Aik - Ajk) / Dkmax);
+            }
+            propCount = Math.pow(propCount, 1 / p1.props.length);
+            return propCount;
+        }
+
+        function allColored(attrData) {
+            var allColoredFlag = true;
+            for (var i = 0; i < attrData.length; i++) {
+                if (attrData[i].color === -1) {
+                    allColoredFlag = false;
+                }
+            }
+            return allColoredFlag;
+        }
+
+        function getUnColoredData(attrData) {
+            var unColoredData = [];
+            for (var i = 0; i < attrData.length; i++) {
+                if (attrData[i].color === -1) {
+                    unColoredData.push(attrData[i]);
+                }
+            }
+            return unColoredData;
+        }
+
+        function getColoredData() {
+            var coloredData = [];
+            for (var i = 0; i < attrData.length; i++) {
+                if (attrData[i].color !== -1) {
+                    coloredData.push(attrData[i]);
+                }
+            }
+            return coloredData;
+        }
+        var colorIndex = 0;
+
+        while (!allColored(attrData)) {
+            var unColoredData = getUnColoredData(attrData);
+            var Fk = unColoredData[parseInt(Math.random() * (unColoredData.length - 1))];
+            var connectedData = [];
+            for (var i = unColoredData.length - 1; i >= 0; i--) {
+                if (getSpaceDis(Fk, unColoredData[i]) <= spaceDisThr &&
+                    getPropDis(Fk, unColoredData[i]) <= propDisThr) {
+                    unColoredData[i].color = colorIndex;
+                    connectedData.push(unColoredData[i]);
+
+                }
+            }
+            if (connectedData.length > 1) {
+                for (var i = 0; i < connectedData.length; i++) {
+                    let Fk = connectedData[i];
+                    let unColoredData = getUnColoredData(attrData);
+                    for (var j = unColoredData.length - 1; j >= 0; j--) {
+                        if (getSpaceDis(Fk, unColoredData[j]) <= spaceDisThr &&
+                            getPropDis(Fk, unColoredData[j]) <= propDisThr) {
+                            unColoredData[j].color = colorIndex;
+                            connectedData.push(unColoredData[j]);
+                        }
+                    }
+                }
+            }
+            colorIndex++;
+        }
+        var cluster_result = [];
+        for (var i = 0; i < colorIndex; i++) {
+            var array = [];
+            for (var j = 0; j < attrData.length; j++) {
+                if (attrData[j].color == i) {
+                    array.push(attrData[j]);
+                }
+            }
+            cluster_result.push(array);
+        }
+        console.log('propDisThr: ', propDisThr);
+        console.log('spaceDisThr: ', spaceDisThr);
+        console.log('cluster_result: ', cluster_result);
+    }
+    cluster(data);
+</script>
+
+
+</html>
