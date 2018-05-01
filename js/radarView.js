@@ -56,7 +56,12 @@ function addRadarView(axisOrder, gdpData, thisClass, cluster_result) {
 
   var data = [];
   var allAxisScale = [];
+  console.log('axisSequence: ', axisSequence);
+  axisSequence.sort(function(a,b){
+    return a.index-b.index;
+  })
   for (var i = 0; i < axisSequence.length; i++) {
+    
     var radarData = [];
     var thisGdpData = [];
     var thisGdp = axisSequence[i].name;
@@ -68,7 +73,6 @@ function addRadarView(axisOrder, gdpData, thisClass, cluster_result) {
         thisGdpData.push(parseFloat(gdpData2[j][thisGdp]))
       }
     }
-      
       let minAxisGdp = d3.min(thisGdpData);
       let maxAxisGdp = d3.max(thisGdpData);
       scale.domain([minAxisGdp, maxAxisGdp])

@@ -55,9 +55,7 @@ function RadarChart(id, data, options, originalData, allAxisScale, thisGdpData) 
 	//Scale for the radius
 	var rScale = d3.scaleLinear()
 		.range([0, radius])
-
 		.domain([0, maxValue]);
-
 
 	/////////////////////////////////////////////////////////
 	//////////// Create the container SVG and g /////////////
@@ -164,7 +162,6 @@ function RadarChart(id, data, options, originalData, allAxisScale, thisGdpData) 
 			if (d === '交通运输仓储邮政业') {
 				d = '交通运输\n仓储邮政业'
 			}
-
 			return d
 		})
 		.call(wrap, cfg.wrapWidth);
@@ -190,9 +187,11 @@ function RadarChart(id, data, options, originalData, allAxisScale, thisGdpData) 
 	}
 
 	//Create a wrapper for the blobs	
-
+	console.log('data: ', data);
+	/*  */
 	var blobWrapper = g.selectAll(".radarWrapper")
 		.data(data)
+
 
 		.enter().append("g")
 		.attr("class", "radarWrapper");
@@ -244,7 +243,7 @@ function RadarChart(id, data, options, originalData, allAxisScale, thisGdpData) 
 		.style("filter", "url(#glow)");
 
 	//Append the circles
-	var countDot=0;
+	var countDot = 0;
 	blobWrapper.selectAll(".radarCircle")
 		.data(function (d, i) {
 			return d;
@@ -259,11 +258,11 @@ function RadarChart(id, data, options, originalData, allAxisScale, thisGdpData) 
 			return allAxisScale[i](d.value) * Math.sin(angleSlice * i - Math.PI / 2);
 		})
 		.style("fill", function (d, i, j) {
-			let dotindex=parseInt(countDot/11)
+			let dotindex = parseInt(countDot / 11)
 			countDot++;
 			return cfg.color(dotindex);
-			
-			
+
+
 		})
 		.style("fill-opacity", 0.8);
 

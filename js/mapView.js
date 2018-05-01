@@ -749,7 +749,7 @@ function load(SystemName) {
     }
 }
 
-load('GDP');
+load('Air');
 d3.select("#loadDataButton").text("Air Data");
 d3.select("#loadDataButton").append("span")
     .attr("class", 'caret');
