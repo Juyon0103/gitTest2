@@ -20,7 +20,27 @@ function getMutualInfo(mapCluster, parallelCluster) {
 
 
     var mutualInfoArray = [];
-    // testMutualInfo();
+    //testMutualInfo();
+
+    function testMutualInfo() {
+        var testCluster = [];
+        testCluster.name = 'test';
+        var testCluster = [];
+        for (var i = 0; i < mapCluster.length; i++) {
+            testCluster[i] = [];
+            for (var j = 0; j < mapCluster[i].length; j++) {
+                testCluster[i][j] = [];
+                testCluster[i][j][0] = 123;
+                testCluster[i][j].name = mapCluster[i][j].name;
+            }
+        }
+        var aTest = [];
+        for (var i = 0; i < 10; i++) {
+            aTest.push(testCluster);
+            aTest.name = 'GDPTEST';
+        }
+        parallelCluster.push(aTest);
+    }
 
     for (var i = 0; i < parallelCluster.length; i++) {
         var kOfKmeans = getAxisK(mapCluster, parallelCluster[i]);
@@ -33,11 +53,14 @@ function getMutualInfo(mapCluster, parallelCluster) {
         };
         mutualInfoArray.push(axisInfo);
     }
+
     var mutualInfoArray2 = cloneObj(mutualInfoArray);
+    //  console.log('mutualInfoArray2: ', mutualInfoArray2);
 
     var twoMaxInfoArray = getTwoMaxInfo(mutualInfoArray);
-
     var axisOrder = getOtherAxisOrder(mutualInfoArray, twoMaxInfoArray);
+
+    console.log('axisOrder: ', axisOrder);
 
 
 
@@ -67,10 +90,15 @@ function getMutualInfo(mapCluster, parallelCluster) {
 }
 //for on axis
 function getAxisI(mapCluster, axisClusterResult) {
-    var axisI = [];
-    for (var i = 0; i < axisClusterResult.length; i++) {
 
+    console.log("--------------------");
+    console.log("--------------------");
+    console.log("--------------------");
+    var axisI = [];
+    console.log(axisClusterResult);
+    for (var i = 0; i < axisClusterResult.length; i++) {
         axisI.push(getOneClusterI(mapCluster, axisClusterResult[i]));
+        console.log(getOneClusterI(mapCluster, axisClusterResult[i]));
     }
     var maxI = d3.max(axisI);
     return maxI;
@@ -93,22 +121,24 @@ function getAxisK(mapCluster, axisClusterResult) {
 //for one cluster result on an axis
 function getOneClusterI(mapCluster, OneClusterResult) {
     var Hx = -getHx(mapCluster);
-
     var clusterCount = 0;
-
+    //  console.log('OneClusterResult: ', OneClusterResult);
     for (var i = 0; i < OneClusterResult.length; i++) {
         clusterCount += OneClusterResult[i].length;
     }
-
+    // console.log('clusterCount: ', clusterCount);
     var Hy = 0;
+    /*  console.log("当前的Kmeans聚类是:" , OneClusterResult); */
     for (var i = 0; i < OneClusterResult.length; i++) {
         var Pbj = OneClusterResult[i].length / clusterCount;
+        /* console.log("其中的第" + i + "类有" + OneClusterResult[i].length + "个");
+           console.log("所以bj是" + Pbj);
+           console.log('(Pbj * Math.log2(Pbj)): ', (Pbj * Math.log2(Pbj))); */
         Hy += (Pbj * Math.log2(Pbj));
     }
+
     Hy = -Hy;
-
     var Hxy = 0;
-
     for (var i = 0; i < mapCluster.length; i++) {
         var thisMapClass = mapCluster[i];
         for (var j = 0; j < OneClusterResult.length; j++) {
@@ -116,13 +146,21 @@ function getOneClusterI(mapCluster, OneClusterResult) {
             var bjai = getbjai(thisMapClass, thisParaClass);
             var ai = getai(mapCluster, thisMapClass);
             if (ai * bjai == 0) {
-                Hxy += 0;
+                Hxy -= 0;
             } else {
                 Hxy += (ai * bjai * Math.log2(ai * bjai));
             }
         }
     }
+    /*  console.log('Hy: ', Hy);
+     console.log('Hxy: ', Hxy); */
+     /* console.log('Hx: ', Hx);
+     console.log('Hy: ', Hy);
+     console.log('Hxy: ', Hxy); */
     return Hx + Hy + Hxy;
+    
+    
+    
 }
 
 function getbjai(mapClass, paraClass) {
@@ -132,7 +170,6 @@ function getbjai(mapClass, paraClass) {
             continue;
         }
         for (var j = 0; j < paraClass.length; j++) {
-
             if (mapClass[i].name == paraClass[j].name) {
                 bjai++;
             }
@@ -147,7 +184,6 @@ function getai(mapCluster, mapClass) {
     for (var i = 0; i < mapCluster.length; i++) {
         mapClusterCount += mapCluster[i].length;
     }
-
     var ai = mapClass.length / mapClusterCount;
     return ai;
 }
@@ -159,7 +195,7 @@ function getHx(mapCluster) {
     }
     var Hx = 0;
     for (var i = 0; i < mapCluster.length; i++) {
-        var Pai = mapCluster[i].length / mapClusterCount;
+        let Pai = mapCluster[i].length / mapClusterCount;
         Hx += (Pai * Math.log2(Pai));
     }
     return Hx;
@@ -170,7 +206,6 @@ function getTwoMaxInfo(mutualInfoArray) {
     var maxInfo = d3.max(mutualInfoArray, function (d, i) {
         return d.mutualInfo;
     })
-
     var maxInfo2 = d3.max(mutualInfoArray, function (d, i) {
         if (d.mutualInfo != maxInfo) {
             return d.mutualInfo;
@@ -180,7 +215,6 @@ function getTwoMaxInfo(mutualInfoArray) {
         if (mutualInfoArray[i].mutualInfo == maxInfo) {
             twoMaxArray.push(mutualInfoArray[i]);
             mutualInfoArray.splice(i, 1);
-
             if (twoMaxArray.length == 1) {
                 break;
             }

@@ -179,7 +179,7 @@ function load(SystemName) {
             cluster_result = gdpCluster(sitesData, gdpData, spaceDisThr, propDisThr);
         }
 
-        console.log('cluster_result: ', cluster_result);
+
         cluster_result.sort(function (a, b) {
 
             if (a.length === b.length) {
@@ -278,8 +278,8 @@ function load(SystemName) {
             axisOrder = getMutualInfo([cluster_result[curSelectedMapClass]], kmeansClusterResult);
 
 
-        }
 
+        }
 
         addMarixView(axisOrder, cluster_result, SystemName);
         addRadarView(axisOrder, gdpData);
@@ -288,9 +288,8 @@ function load(SystemName) {
                 axisOrder = getMutualInfo(cluster_result, kmeansClusterResult);
             } else {
                 axisOrder = getMutualInfo([cluster_result[curSelectedMapClass]], kmeansClusterResult);
-                
             }
-            console.log('axisOrder: ', axisOrder);
+
             /*   selection.selectAll("g").remove(); */
             var circleG = selection.append("g")
                 .attr("class", "mapCircleG");
@@ -300,7 +299,6 @@ function load(SystemName) {
                 parallelCoors(map, kmeansClusterResult, axisOrder, gdpData,
                     sitesData, cluster_result, selection, projection, curSelectedMapClass, SystemName, colorScale, stackFlag);
             }
-
 
 
 
@@ -565,6 +563,10 @@ function load(SystemName) {
                 }
                 return buildPathFromPoint(d);
             })
+            .attr("id", function (d, i) {
+
+                return i;
+            })
             .attr("clip-path", function (d, i) {
                 return "url(#clip-" + i + ")";
             })
@@ -576,6 +578,7 @@ function load(SystemName) {
             .attr("mapClass", function (d, i) {
                 return d.class;
             })
+
             .attr("class", "voronoiPath")
             .style("fill", "#007FFF")
             .style("pointer-events", "auto")
@@ -601,8 +604,6 @@ function load(SystemName) {
                 }
             })
             .on("click", function (d, i) {
-
-
                 if (d3.event.ctrlKey) {
                     //paraLines
                     curSelectedMapClass = -1;
@@ -746,10 +747,14 @@ function load(SystemName) {
                  .selectAll("path")
                  .style("fill-opacity", "0.4"); 
          }) */
+
+
     }
 }
 
-load('Air');
+
+
+load('GDP');
 d3.select("#loadDataButton").text("Air Data");
 d3.select("#loadDataButton").append("span")
     .attr("class", 'caret');

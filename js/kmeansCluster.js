@@ -17,14 +17,12 @@ function getKmeansClusterData(gdpData) {
 }
 
 function kmeansCluster(clusterData) {
-
     var cluster_result = [];
-
     var kmeans = new KMeans();
     for (var i = 0; i < clusterData.length; i++) {
         cluster_result[i] = [];
         cluster_result[i].name = clusterData[i].name;
-        for (var j = 0; j < 7; j++) {
+        for (var j = 0; j < 31; j++) {
             cluster_result[i][j] = kmeans.cluster(clusterData[i], j);
         }
     }
