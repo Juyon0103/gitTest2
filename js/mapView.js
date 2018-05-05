@@ -232,8 +232,40 @@ function load(SystemName) {
         addMapColorBar();
         originalClusterResult = cloneObj(cluster_result);
         kmeansClusterData = getKmeansClusterData(gdpData);
-        var nuclearResult=nuclearDensity(gdpData);
+        var nuclearResult = nuclearDensity(gdpData);
+
+        var nuclearResult2 = cloneObj(nuclearResult);
+        var paraResult = changeNuclearFormat();
         console.log('nuclearResult: ', nuclearResult);
+
+        function changeNuclearFormat() {
+            var paraResult = [];
+
+            for (var i = 0; i < nuclearResult.length; i++) {
+
+                paraResult[i] = [];
+                paraResult[i].name = nuclearResult[i].name;
+                for (var j = 0; j < 10; j++) {
+                    paraResult[i][j] = cloneObj(nuclearResult[i]);
+                }
+
+            }
+            for (var i = 0; i < paraResult.length; i++) {
+                for (var j = 0; j < paraResult[i].length; j++) {
+                    for (var s = 0; s < paraResult[i][j].length; s++) {
+                        for (var m = 0; m < paraResult[i][j][s].length; m++) {
+                            let arr = [paraResult[i][j][s][m].value];
+
+                            arr.name = paraResult[i][j][s][m].name;
+                            paraResult[i][j][s][m] = arr;
+                        }
+                    }
+                }
+            }
+
+            return paraResult;
+        }
+
         kmeansClusterResult = kmeansCluster(kmeansClusterData);
 
         var usedParaCluster = [];
@@ -267,15 +299,20 @@ function load(SystemName) {
         }
         kmeansClusterResult = usedParaCluster;
 
+        kmeansClusterResult = paraResult;
+        console.log('paraResult: ', paraResult);
+        console.log('kmeansClusterResult: ', kmeansClusterResult);
+
         if (curSelectedMapClass === -1) {
             axisOrder = getMutualInfo(cluster_result, kmeansClusterResult);
         } else {
             axisOrder = getMutualInfo([cluster_result[curSelectedMapClass]], kmeansClusterResult);
         }
-        
         console.log('axisOrder: ', axisOrder);
+
         addMarixView(axisOrder, cluster_result, SystemName);
         addRadarView(axisOrder, gdpData);
+
         var d3Overlay = L.d3SvgOverlay(function (selection, projection) {
             if (curSelectedMapClass === -1) {
                 axisOrder = getMutualInfo(cluster_result, kmeansClusterResult);

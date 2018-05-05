@@ -32,8 +32,6 @@ function nuclearDensity(gdpData) {
         }
         clusterResult[i] = axisNuclear(thisIndusGdp);
         clusterResult[i].name = thisIndusName;
-
-
     }
     console.log('clusterResult: ', clusterResult);
     return clusterResult;

@@ -1,4 +1,5 @@
-function getMutualInfo(mapCluster, parallelCluster) {
+function getMutualInfo(mapCluster, parallelCluster,nuclearResult) {    
+    console.log('parallelCluster: ', parallelCluster);
 
 
 
@@ -100,7 +101,7 @@ function getAxisI(mapCluster, axisClusterResult) {
         axisI.push(getOneClusterI(mapCluster, axisClusterResult[i]));
         //  
     }
-    var maxI = d3.max(axisI);
+    var maxI = d3.min(axisI);
     return maxI;
 }
 
@@ -110,7 +111,7 @@ function getAxisK(mapCluster, axisClusterResult) {
     for (var i = 0; i < axisClusterResult.length; i++) {
         axisI.push(getOneClusterI(mapCluster, axisClusterResult[i]));
     }
-    var maxI = d3.max(axisI, function (d, i) {
+    var maxI = d3.min(axisI, function (d, i) {
         return d;
     });
     var maxIndex = axisI.indexOf(maxI);
@@ -196,10 +197,10 @@ function getHx(mapCluster) {
 
 function getTwoMaxInfo(mutualInfoArray) {
     var twoMaxArray = [];
-    var maxInfo = d3.max(mutualInfoArray, function (d, i) {
+    var maxInfo = d3.min(mutualInfoArray, function (d, i) {
         return d.mutualInfo;
     })
-    var maxInfo2 = d3.max(mutualInfoArray, function (d, i) {
+    var maxInfo2 = d3.min(mutualInfoArray, function (d, i) {
         if (d.mutualInfo != maxInfo) {
             return d.mutualInfo;
         }
@@ -307,7 +308,7 @@ function getOtherAxisOrder(mutualInfoArray, twoMaxInfoArray) {
             }
         }
 
-        var maxI = d3.max(maxIArray, function (d, i) {
+        var maxI = d3.min(maxIArray, function (d, i) {
             return d;
         })
         for (var i = 0; i < twoMaxInfoArray.length; i++) {
