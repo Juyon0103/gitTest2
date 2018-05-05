@@ -27,6 +27,7 @@ var showParaFlag = false;
 var stackFlag = false;
 var spaceDisThr = 4.7;
 var propDisThr = 2.72;
+var cigma = 2;
 var curSelectedMapClass = -1;
 var voronoiR = 50;
 var sitesData;
@@ -43,6 +44,8 @@ var mapColorBarG = d3.select("#colorRectSvg").append("g")
     .attr("class", "mapColorBarG");
 var colorRectHeight = 18;
 var colorRectWidth = 18;
+var nuclearResult;
+var paraResult;
 
 function load(SystemName) {
 
@@ -231,21 +234,19 @@ function load(SystemName) {
         }
         addMapColorBar();
         originalClusterResult = cloneObj(cluster_result);
+
         kmeansClusterData = getKmeansClusterData(gdpData);
-        var nuclearResult = nuclearDensity(gdpData);
+        nuclearResult = nuclearDensity(gdpData);
+        paraResult = changeNuclearFormat(nuclearResult);
 
-        var nuclearResult2 = cloneObj(nuclearResult);
-        var paraResult = changeNuclearFormat();
-        console.log('nuclearResult: ', nuclearResult);
-
-        function changeNuclearFormat() {
+        function changeNuclearFormat(nuclearResult) {
             var paraResult = [];
 
             for (var i = 0; i < nuclearResult.length; i++) {
 
                 paraResult[i] = [];
                 paraResult[i].name = nuclearResult[i].name;
-                for (var j = 0; j < 10; j++) {
+                for (var j = 0; j < 1; j++) {
                     paraResult[i][j] = cloneObj(nuclearResult[i]);
                 }
 
@@ -300,15 +301,15 @@ function load(SystemName) {
         kmeansClusterResult = usedParaCluster;
 
         kmeansClusterResult = paraResult;
-        console.log('paraResult: ', paraResult);
-        console.log('kmeansClusterResult: ', kmeansClusterResult);
+
+
 
         if (curSelectedMapClass === -1) {
             axisOrder = getMutualInfo(cluster_result, kmeansClusterResult);
         } else {
             axisOrder = getMutualInfo([cluster_result[curSelectedMapClass]], kmeansClusterResult);
         }
-        console.log('axisOrder: ', axisOrder);
+
 
         addMarixView(axisOrder, cluster_result, SystemName);
         addRadarView(axisOrder, gdpData);
@@ -461,6 +462,39 @@ function load(SystemName) {
                         }
                     });
                     $("#propDisAmount").val(propDisThr);
+
+                    $("#cigmaSlider").slider({
+                        value: 2,
+                        min: 0.01,
+                        max: 10,
+                        step: 0.001,
+                        slide: function (event, ui) {
+                            nuclearResult = nuclearDensity(gdpData, ui.value);
+                            
+                            paraResult = changeNuclearFormat(nuclearResult, ui.value);
+                            kmeansClusterResult = paraResult;
+
+                            if (curSelectedMapClass === -1) {
+                                axisOrder = getMutualInfo(cluster_result, kmeansClusterResult);
+                            } else {
+                                axisOrder = getMutualInfo([cluster_result[curSelectedMapClass]], kmeansClusterResult);
+
+                            }
+                            
+                            addRadarView(axisOrder, gdpData);
+                            addVoronoi(sitesData, selection, projection, cluster_result, axisOrder, gdpData);
+                            changeClusterColor(selection, cluster_result);
+                            if (showParaFlag) {
+                                parallelCoors(map, kmeansClusterResult, axisOrder, gdpData,
+                                    sitesData, cluster_result, selection, projection, curSelectedMapClass, SystemName, colorScale, stackFlag);
+                            }
+                            addMarixView(axisOrder, cluster_result, SystemName);
+
+                            $("#cigmaAmount").val(ui.value);
+                        }
+                    });
+                    $("#cigmaAmount").val(cigma);
+
                 });
                 firstDraw = false;
             }

@@ -1,9 +1,4 @@
-function getMutualInfo(mapCluster, parallelCluster,nuclearResult) {    
-    console.log('parallelCluster: ', parallelCluster);
-
-
-
-
+function getMutualInfo(mapCluster, parallelCluster, nuclearResult) {
 
     for (var i = 0; i < parallelCluster.length; i++) {
         if (parallelCluster[i] === undefined) {
@@ -18,7 +13,6 @@ function getMutualInfo(mapCluster, parallelCluster,nuclearResult) {
             }
         }
     }
-
 
     var mutualInfoArray = [];
     //testMutualInfo();
@@ -48,7 +42,7 @@ function getMutualInfo(mapCluster, parallelCluster,nuclearResult) {
         var axisInfo = {
             index: i,
             k: kOfKmeans,
-            parallelCluster: parallelCluster[i][kOfKmeans],
+            parallelCluster: parallelCluster[i][0],
             mutualInfo: getAxisI(mapCluster, parallelCluster[i]),
             name: parallelCluster[i].name
         };
@@ -60,12 +54,6 @@ function getMutualInfo(mapCluster, parallelCluster,nuclearResult) {
 
     var twoMaxInfoArray = getTwoMaxInfo(mutualInfoArray);
     var axisOrder = getOtherAxisOrder(mutualInfoArray, twoMaxInfoArray);
-
-    
-
-
-
-
 
     return axisOrder;
 
@@ -92,9 +80,6 @@ function getMutualInfo(mapCluster, parallelCluster,nuclearResult) {
 //for on axis
 function getAxisI(mapCluster, axisClusterResult) {
 
-    
-    
-    
     var axisI = [];
     //  
     for (var i = 0; i < axisClusterResult.length; i++) {
@@ -107,14 +92,17 @@ function getAxisI(mapCluster, axisClusterResult) {
 
 function getAxisK(mapCluster, axisClusterResult) {
 
-    var axisI = [];
-    for (var i = 0; i < axisClusterResult.length; i++) {
-        axisI.push(getOneClusterI(mapCluster, axisClusterResult[i]));
-    }
-    var maxI = d3.min(axisI, function (d, i) {
-        return d;
-    });
-    var maxIndex = axisI.indexOf(maxI);
+    return axisClusterResult[0].length;
+
+    /*   var axisI = [];
+      for (var i = 0; i < axisClusterResult.length; i++) {
+          axisI.push(getOneClusterI(mapCluster, axisClusterResult[i]));
+      }
+      var maxI = d3.min(axisI, function (d, i) {
+          return d;
+      });
+      var maxIndex = axisI.indexOf(maxI); */
+
     return maxIndex;
 }
 
@@ -153,8 +141,9 @@ function getOneClusterI(mapCluster, OneClusterResult) {
             }
         }
     }
-    
+
     return -2 * Hxy - Hx - Hy;
+
 }
 
 function getbjai(mapClass, paraClass) {

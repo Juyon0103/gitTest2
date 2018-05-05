@@ -1,7 +1,6 @@
-function nuclearDensity(gdpData) {
+function nuclearDensity(gdpData, CIGMA = 2) {
 
-    const CIGMA = 2,
-        SECTION = 100,
+    const SECTION = 100,
         AXISLENGTH = 300;
     var sectionArray = d3.range(0, AXISLENGTH + AXISLENGTH / SECTION, AXISLENGTH / SECTION);
 
