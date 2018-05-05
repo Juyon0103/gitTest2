@@ -55,12 +55,12 @@ function getMutualInfo(mapCluster, parallelCluster) {
     }
 
     var mutualInfoArray2 = cloneObj(mutualInfoArray);
-    //  console.log('mutualInfoArray2: ', mutualInfoArray2);
+    //  
 
     var twoMaxInfoArray = getTwoMaxInfo(mutualInfoArray);
     var axisOrder = getOtherAxisOrder(mutualInfoArray, twoMaxInfoArray);
 
-    console.log('axisOrder: ', axisOrder);
+    
 
 
 
@@ -91,14 +91,14 @@ function getMutualInfo(mapCluster, parallelCluster) {
 //for on axis
 function getAxisI(mapCluster, axisClusterResult) {
 
-    console.log("--------------------");
-    console.log("--------------------");
-    console.log("--------------------");
+    
+    
+    
     var axisI = [];
-    console.log(axisClusterResult);
+    //  
     for (var i = 0; i < axisClusterResult.length; i++) {
         axisI.push(getOneClusterI(mapCluster, axisClusterResult[i]));
-        console.log(getOneClusterI(mapCluster, axisClusterResult[i]));
+        //  
     }
     var maxI = d3.max(axisI);
     return maxI;
@@ -122,18 +122,18 @@ function getAxisK(mapCluster, axisClusterResult) {
 function getOneClusterI(mapCluster, OneClusterResult) {
     var Hx = -getHx(mapCluster);
     var clusterCount = 0;
-    //  console.log('OneClusterResult: ', OneClusterResult);
+    //  
     for (var i = 0; i < OneClusterResult.length; i++) {
         clusterCount += OneClusterResult[i].length;
     }
-    // console.log('clusterCount: ', clusterCount);
+    // 
     var Hy = 0;
-    /*  console.log("当前的Kmeans聚类是:" , OneClusterResult); */
+    /*   */
     for (var i = 0; i < OneClusterResult.length; i++) {
         var Pbj = OneClusterResult[i].length / clusterCount;
-        /* console.log("其中的第" + i + "类有" + OneClusterResult[i].length + "个");
-           console.log("所以bj是" + Pbj);
-           console.log('(Pbj * Math.log2(Pbj)): ', (Pbj * Math.log2(Pbj))); */
+        /* 
+           
+            */
         Hy += (Pbj * Math.log2(Pbj));
     }
 
@@ -152,15 +152,8 @@ function getOneClusterI(mapCluster, OneClusterResult) {
             }
         }
     }
-    /*  console.log('Hy: ', Hy);
-     console.log('Hxy: ', Hxy); */
-     /* console.log('Hx: ', Hx);
-     console.log('Hy: ', Hy);
-     console.log('Hxy: ', Hxy); */
-    return Hx + Hy + Hxy;
     
-    
-    
+    return -2 * Hxy - Hx - Hy;
 }
 
 function getbjai(mapClass, paraClass) {
@@ -245,7 +238,7 @@ function getAxisMutualInfo(axis1, axis2) {
     var Hy = getAxisHx(cluster2);
     var Hxy = getAxisHxy(cluster1, cluster2);
 
-    return Hx + Hy + Hxy;
+    return -2 * Hxy - Hx - Hy;
 
 }
 
@@ -284,8 +277,6 @@ function getAxisHxy(cluster1, cluster2) {
 }
 
 function getAxisBjAi(class1, class2) {
-
-
     var same = 0;
     for (var i = 0; i < class1.length; i++) {
         for (var j = 0; j < class2.length; j++) {
