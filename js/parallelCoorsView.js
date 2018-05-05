@@ -652,7 +652,6 @@ function parallelCoors(map, meansClusterResult, axisOrder,
                     var thisPrv = thisClass[j];
 
                     var controlPointArray = [];
-
                     for (var s = 0; s <= thisPrv.length - 2; s++) {
 
                         var m = s + 1;
