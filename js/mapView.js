@@ -178,8 +178,6 @@ function load(SystemName) {
         } else {
             cluster_result = gdpCluster(sitesData, gdpData, spaceDisThr, propDisThr);
         }
-
-
         cluster_result.sort(function (a, b) {
 
             if (a.length === b.length) {
@@ -196,7 +194,6 @@ function load(SystemName) {
         }
 
         function addMapColorBar() {
-
             d3.select(".mapColorBarG").selectAll("rect").remove();
             d3.select(".mapColorBarG").selectAll("text").remove();
             d3.select(".mapColorBarG").selectAll("circle").remove();
@@ -234,12 +231,10 @@ function load(SystemName) {
         }
         addMapColorBar();
         originalClusterResult = cloneObj(cluster_result);
-
-
         kmeansClusterData = getKmeansClusterData(gdpData);
+        var nuclearResult=nuclearDensity(gdpData);
+        console.log('nuclearResult: ', nuclearResult);
         kmeansClusterResult = kmeansCluster(kmeansClusterData);
-
-
 
         var usedParaCluster = [];
         for (var i = 0; i < kmeansClusterResult.length; i++) {
@@ -276,11 +271,9 @@ function load(SystemName) {
             axisOrder = getMutualInfo(cluster_result, kmeansClusterResult);
         } else {
             axisOrder = getMutualInfo([cluster_result[curSelectedMapClass]], kmeansClusterResult);
-
-
-
         }
-
+        
+        console.log('axisOrder: ', axisOrder);
         addMarixView(axisOrder, cluster_result, SystemName);
         addRadarView(axisOrder, gdpData);
         var d3Overlay = L.d3SvgOverlay(function (selection, projection) {

@@ -1,5 +1,4 @@
 function parallelCoors(map, meansClusterResult, axisOrder,
-
     gdpData, sitesData, cluster_result, selection, projection, curSelectedMapClass, systemName, colorScale, stackFlag) {
     if (systemName == 'GDP') {
         var thinLineWidth = 4;

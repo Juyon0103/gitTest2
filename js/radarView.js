@@ -56,7 +56,7 @@ function addRadarView(axisOrder, gdpData, thisClass, cluster_result) {
 
   var data = [];
   var allAxisScale = [];
-  console.log('axisSequence: ', axisSequence);
+  
   axisSequence.sort(function(a,b){
     return a.index-b.index;
   })

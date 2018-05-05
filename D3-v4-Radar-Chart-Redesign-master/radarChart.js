@@ -187,7 +187,7 @@ function RadarChart(id, data, options, originalData, allAxisScale, thisGdpData) 
 	}
 
 	//Create a wrapper for the blobs	
-	console.log('data: ', data);
+	
 	/*  */
 	var blobWrapper = g.selectAll(".radarWrapper")
 		.data(data)

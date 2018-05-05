@@ -30,7 +30,7 @@
        }
      }
    }
-   console.log('axisSequence: ', axisSequence);
+   
    for (var i = 0; i < axisOrder.length; i++) {
      if (i == 0) {
        for (var j = axisOrder[i].length - 1; j >= 0; j--) {
@@ -253,7 +253,7 @@
 
      //use 'let' here to create a closure which mouseover event depends on 
 
-     console.log('matrixData: ', matrixData);
+     
      for (let i = 0; i < matrixData.length; i++) {
        
        for (let j = 0; j < matrixData[i].length; j++) {
