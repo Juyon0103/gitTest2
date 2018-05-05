@@ -158,7 +158,7 @@ function parallelCoors(map, meansClusterResult, axisOrder,
 
             if (systemName == 'GDP') {
                 selection.selectAll("text").style("font-size", "25px")
-                .style("stroke-weight","bold")
+                    .style("stroke-weight", "bold")
 
             }
 
@@ -166,7 +166,7 @@ function parallelCoors(map, meansClusterResult, axisOrder,
                 selection.selectAll(".domain").style("stroke-width", "0.1px")
                 selection.selectAll("line").style("stroke-width", "0.1px")
                 selection.selectAll("text").style("font-size", "3px")
-                
+
                 selection.selectAll(".axisG").selectAll("text").attr("x", "-1.5")
             } else if (systemName == 'Wenzhou') {
                 selection.selectAll("text").style("font-size", "12px")
@@ -448,7 +448,7 @@ function parallelCoors(map, meansClusterResult, axisOrder,
             for (var i = 0; i < cluster_result.length; i++) {
 
                 var thisClass = cluster_result[i];
-                
+
                 var maxDis = getMaxDisInOneCluster(thisClass);
                 var midPointX = (maxDis.point1.x + maxDis.point2.x) / 2;
                 var midPointY = (maxDis.point1.y + maxDis.point2.y) / 2;
@@ -643,11 +643,8 @@ function parallelCoors(map, meansClusterResult, axisOrder,
                     }
                 }
             }
-
             for (var i = 0; i < clusterLine.length; i++) {
-
                 var thisClass = clusterLine[i];
-
                 for (var j = 0; j < thisClass.length; j++) {
                     var thisPrv = thisClass[j];
 
